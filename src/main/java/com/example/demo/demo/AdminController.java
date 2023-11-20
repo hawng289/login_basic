@@ -4,7 +4,6 @@ import com.example.demo.config.ApplicationConfig;
 import com.example.demo.user.User;
 import com.example.demo.user.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +13,7 @@ public class AdminController {
     ApplicationConfig applicationConfig;
     private UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping("/")
     @PreAuthorize("hasAuthority('admin:read')")
     public String get() {
         return "GET:: admin controller";
@@ -23,12 +22,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:create')")
 
     public String post(@RequestBody User userDTO) {
-
-
             userDTO.setPassword(applicationConfig.passwordEncoder().encode(userDTO.getPassword()));
-            // Thiết lập các thông tin khác của người dùng
-            // ...
-
             userRepository.save(userDTO); // Lưu người dùng vào cơ sở dữ liệu
 
             return "User created successfully";

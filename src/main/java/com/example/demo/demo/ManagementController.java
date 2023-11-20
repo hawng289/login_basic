@@ -1,8 +1,5 @@
 package com.example.demo.demo;
 
-
-import io.swagger.oas.annotations.Operation;
-import io.swagger.oas.annotations.responses.ApiResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
