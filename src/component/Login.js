@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import Cookies from 'js-cookie';
 
 
 function Login() {
-    // const [username, setUsername] = useState('');
-    // const [password, setPassword] = useState('');
     const [userData, setUserData] = useState(
         {
-            username: '',
-            password: ''
+            email: "",
+            password: ""
         }
     )
     const [wrong, setWrong] = useState(false);
@@ -25,40 +24,47 @@ function Login() {
         })
     }
 
+    // Thêm token vào cookie sau khi đăng nhập thành công
     const handleLogin = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
-        // try {
-        //     const response = await axios.post('/api/auth/login', { username, password });
-        //     navigate('/home');
-        // } catch (error) {
-        //     console.error('Login failed', error);
-        // }
-        axios
-            .post('/api/auth/login', { userData })
-            .then(res => {
-                const user = res.data
-                setUserData({user})
-            })
-            .catch(err => {
-                setWrong(true);
-                console.log('Login failed', err)
-            })
-
+        try {
+            const response = await axios.post('http://localhost:3000/api/v1/auth/login', userData);
+            const token = response.data.access_token;
+            Cookies.set('token', token, { expires: 1 }); // Token hết hạn sau 1 ngày
+            navigate('/home');
+        } catch (error) {
+            setWrong(true)
+            console.error('Login failed', error);
+        }
     };
+
+    // Trích xuất token từ cookie trước mỗi yêu cầu đã xác thực
+    axios.interceptors.request.use(
+        config => {
+            const token = Cookies.get('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        },
+        error => {
+            return Promise.reject(error);
+        }
+    );
 
     return (
         <div className='login-container'>
             <form onSubmit={handleLogin}>
                 <h2>Login</h2>
-                <label htmlFor="username">Username:</label>
+                <label htmlFor="email">email:</label>
                 <input
-                    className='username'
-                    placeholder='username'
+                    className='email'
+                    placeholder='email'
                     type='text'
-                    value={userData.username}
+                    value={userData.email}
                     onChange={handleChange}
-                    name='username'
+                    name='email'
                 />
                 <label htmlFor="password">Password:</label>
                 <input
