@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,7 @@ import static com.example.demo.user.Permission.*;
 
 
 @RequiredArgsConstructor
-public enum Role {
+public enum Role implements Serializable {
 
   USER(Collections.emptySet()),
   ADMIN(

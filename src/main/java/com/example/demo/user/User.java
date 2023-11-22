@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue

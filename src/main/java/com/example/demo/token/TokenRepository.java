@@ -2,6 +2,8 @@ package com.example.demo.token;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.example.demo.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,4 +17,9 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
   List<Token> findAllValidTokenByUser(Integer id);
 
   Optional<Token> findByToken(String token);
+
+  @Override
+  void delete(Token entity);
+
+  Token findAllByUser(User user);
 }
