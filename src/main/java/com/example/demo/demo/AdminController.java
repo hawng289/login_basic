@@ -6,9 +6,12 @@ import com.example.demo.user.Role;
 import com.example.demo.user.User;
 import com.example.demo.user.UserBasic;
 import com.example.demo.user.UserService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -24,6 +27,7 @@ import static com.example.demo.user.UserBasic.convert;
 public class AdminController {
     private final UserService userService;
     private final AuthenticationService service;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
@@ -56,8 +60,22 @@ public class AdminController {
     @PutMapping
     @PreAuthorize("hasAuthority('admin:update')")
 
-    public String put() {
-        return "PUT:: admin controller";
+    public String put(@RequestParam String firstname,
+                      @RequestParam String lastname,
+                      @RequestParam @NonNull  String email ,
+                      @RequestParam String password,
+                      @RequestParam String role) {
+        try {
+            User user = userService.findByEmail(email);
+            user.setRole(Role.valueOf(role));
+            user.setFirstname(firstname);
+            user.setLastname(lastname);
+            user.setPassword(passwordEncoder.encode(password));
+            userService.save(user);
+            return "Update";
+        } catch (NoSuchElementException e) {
+            return "Email not exsist";
+        }
     }
     @DeleteMapping
     @PreAuthorize("hasAuthority('admin:delete')")
