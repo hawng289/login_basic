@@ -62,7 +62,6 @@ public class AdminController {
     @DeleteMapping
     @PreAuthorize("hasAuthority('admin:delete')")
     public String delete(@RequestParam String email) {
-        userService.deleteByEmail(email);
 
         try {
             userService.findByEmail(email);
