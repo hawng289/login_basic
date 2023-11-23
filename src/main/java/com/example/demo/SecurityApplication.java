@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import static com.example.demo.user.Role.ADMIN;
-import static com.example.demo.user.Role.MANAGER;
+
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
@@ -39,7 +39,7 @@ public class SecurityApplication {
 					.lastname("Admin")
 					.email("manager@mail.com")
 					.password("password")
-					.role(MANAGER)
+					.role(ADMIN)
 					.build();
 			System.out.println("Manager token: " + service.register(manager).getAccessToken());
 
