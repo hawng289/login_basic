@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
+import instance from '../axiosConfig';
 
 
 function Login() {
@@ -29,7 +30,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/auth/login', userData);
+            const response = await axios.post('http://localhost:8080/api/v1/auth/login', userData);
             const token = response.data.access_token;
             Cookies.set('token', token, { expires: 1 }); // Token hết hạn sau 1 ngày
             navigate('/home');

@@ -6,21 +6,12 @@ import {useNavigate} from "react-router-dom";
 
 
 function Home() {
-  const token = Cookies.get("token")
-  const config = {
-    headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    }
-  };
-  const [userData, setUserData] = useState(
+  const [users, setUsers] = useState([
     {
-        email: "",
-        password: ""
-    }
-)
+      email: "",
+      password: ""
+    }]);
 
-  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   
@@ -38,86 +29,54 @@ function Home() {
   // // Hàm lấy danh sách người dùng từ API
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/admin', config);
+      const response = await axios.get('http://localhost:8080/api/v1/admin');
       setUsers(response.data);
-      console.log(response)
+      console.log(users)
     } catch (error) {
       console.error('Error fetching users:', error);
     }
   };
 
   // // Hàm thêm người dùng
-  // const addUser = async () => {
-  //   try {
-  //     const response = await axios.post('YOUR_BACKEND_API/users', {
-  //       // Dữ liệu của người dùng mới
-  //     });
-  //     // Cập nhật danh sách người dùng sau khi thêm thành công
-  //     setUsers([...users, response.data]);
-  //   } catch (error) {
-  //     console.error('Error adding user:', error);
-  //   }
-  // };
+  const addUser = async () => {
+    navigate('/add')
+  }
+
+  const editUser = async () => {
+    navigate('/edit')
+  }
 
   // // Hàm xóa người dùng
-  // const deleteUser = async (id) => {
-  //   try {
-  //     await axios.delete(`YOUR_BACKEND_API/users/${id}`);
-  //     // Cập nhật danh sách người dùng sau khi xóa thành công
-  //     setUsers(users.filter((user) => user.id !== id));
-  //   } catch (error) {
-  //     console.error('Error deleting user:', error);
-  //   }
-  // };
-
-  // // Hàm sửa tên người dùng
-  // const editUser = async (id, newUsername, newPassword) => {
-  //   try {
-  //     await axios.put(`YOUR_BACKEND_API/users/${id}`, {
-  //       username: newUsername,
-  //       password: newPassword
-  //     });
-  //     // Cập nhật danh sách người dùng sau khi sửa thành công
-  //     setUsers(users.map((user) => (user.id === id ? { ...user, username: newUsername, password: newPassword } : user)));
-  //   } catch (error) {
-  //     console.error('Error editing user:', error);
-  //   }
-  // };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
+  const deleteUser = async (email) => {
+    console.log(email)
     try {
-        const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', userData);
-         // Token hết hạn sau 1 ngày
-        
+      await axios.delete(`http://localhost:8080/api/v1/admin?email=${email}`);
+      // Cập nhật danh sách người dùng sau khi xóa thành công
+      setUsers(users.filter((user) => user.email !== email));
     } catch (error) {
-        // setWrong(true)
-        console.error('Login failed', error);
+      console.error('Error deleting user:', error);
     }
-};
-
+  };
 
   return (
     <div>
       {Cookies.get('token') ? <div className="home-container">
+        <h1>Xin chào </h1>
         <h2>Danh sách user</h2>
         <div className="user-list-container">
             <ul>
                 {users.map((user) => (
-                <li key={user.id} className="user-item">
-                    {user.username}
+                <li key={user.email} className="user-item">
+                    {user.email}
                     <div className="user-actions">
-                    {/* <button onClick={() => deleteUser(user.id)}>Xóa</button> */}
-                    {/* <button onClick={() => editUser(user.id, prompt('Nhập tên mới'))}>Sửa</button> */}
-                    <button onClick={handleLogin}>Xóa</button>
-                    {/* <button>Sửa</button> */}
+                    <button onClick={() => deleteUser(user.email)}>Xóa</button>
+                    <button onClick={editUser}>Sửa</button> 
                     </div>
                 </li>
                 ))}
             </ul>
         </div>
-        <button className='add-user-button'>Thêm User</button>
+        <button className='add-user-button' onClick={addUser}>Thêm User</button>
         <div>
           <button onClick={logout}>Logout</button>
         </div>

@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './component/Login';
 import Register from './component/Register';
 import Home from './component/Home';
+import Add from './component/Add';
+import Edit from './component/Edit';
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/add" element={<Add />} />
+          <Route path="/edit" element={<Edit />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
