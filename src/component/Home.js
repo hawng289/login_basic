@@ -9,9 +9,11 @@ function Home() {
   const [users, setUsers] = useState([
     {
       email: "",
-      password: ""
+      password: "",
+      role: ""
     }]);
 
+  const [isAdmin, setIsAdmin] = useState(false)
   const navigate = useNavigate();
 
   
@@ -31,7 +33,7 @@ function Home() {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/admin');
       setUsers(response.data);
-      console.log(users)
+      setIsAdmin(true)
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -43,7 +45,7 @@ function Home() {
   }
 
   const editUser = async () => {
-    navigate('/edit')
+    navigate(`/edit`)
   }
 
   // // Hàm xóa người dùng
@@ -58,11 +60,12 @@ function Home() {
     }
   };
 
+
   return (
     <div>
       {Cookies.get('token') ? <div className="home-container">
         <h1>Xin chào </h1>
-        <h2>Danh sách user</h2>
+        {isAdmin && <div className='list-user'><h2>Danh sách user</h2>
         <div className="user-list-container">
             <ul>
                 {users.map((user) => (
@@ -76,9 +79,9 @@ function Home() {
                 ))}
             </ul>
         </div>
-        <button className='add-user-button' onClick={addUser}>Thêm User</button>
+        <button className='add-user-button' onClick={addUser}>Thêm User</button></div>}
         <div>
-          <button onClick={logout}>Logout</button>
+          <button className='logout' onClick={logout}>Logout</button>
         </div>
     </div> : (
         <div>

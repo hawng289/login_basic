@@ -21,28 +21,28 @@ function Edit() {
         {
             firstname: "",
             lastname: "",
-            email: "",
             password: "",
             role: ""
         }
     )
 
     const navigate = useNavigate();
-    const { userEmail } = useParams(); // Assuming you have a route parameter for the user ID
+    // const {userEmail} = useParams();
 
-    useEffect(() => {
-        // Fetch user data based on userId when the component mounts
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/v1/admin?email=${userEmail}`);
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Fetch user data failed', error.response.data);
-            }
-            };
-
-        fetchUserData();
-    }, [userEmail]);
+    // console.log('par' + userEmail)
+    // useEffect(() => {
+    //     // Fetch user data based on userId when the component mounts
+    //     const fetchUserData = async () => {
+    //       try {
+    //         const response = await axios.get(`http://localhost:8080/api/v1/admin`);
+    //         setUserData(userData.filter((user) => user.email !== userEmail));
+    //       } catch (error) {
+    //         console.error('Fetch user data failed', error.response.data);
+    //       }
+    //     };
+    
+    //     fetchUserData();
+    //   }, [userId]);
 
     function handleChange(e) {
         return setUserData(prev => {
@@ -58,7 +58,7 @@ function Edit() {
         console.log(userData)
         e.preventDefault()
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/admin?firstname=${userData.firstname}&lastname=${userData.lastname}&email=${userData.email}&password=${userData.password}&role=${userData.role}`);
+            const response = await axios.put(`http://localhost:8080/api/v1/admin?firstname=${userData.firstname}&lastname=${userData.lastname}&email=${userEmail}&password=${userData.password}&role=${userData.role}`);
             setUserData(response.data)
             console.log(response.data)
             navigate('/home');
@@ -90,7 +90,7 @@ function Edit() {
                     onChange={handleChange}
                     name='lastname'
                 />
-                <label htmlFor="email">email:</label>
+                {/* <label htmlFor="email">email:</label>
                 <input
                     className='email'
                     placeholder='email'
@@ -98,7 +98,7 @@ function Edit() {
                     value={userData.email}
                     onChange={handleChange}
                     name='email'
-                />
+                /> */}
                 <label htmlFor="password">Password:</label>
                 <input
                     className='password'
